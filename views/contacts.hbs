@@ -1,0 +1,22 @@
+<div class="main-container">
+
+
+    <h1>Contacts</h1>
+
+    <div class="contacts">
+        {{#each contacts}}
+        <div class="contact">
+            <h5 class="name contact-child">{{this.name}}</h5>
+            <h5 class="phoneNum contact-child">{{this.phone}}</h5>
+            <a href="" class="contact-child">Send Texts</a>
+            <a href="" class="contact-child"> View Messages</a>
+            <a href="/contacts/edit/{{this._id}}" class="contact-child"> Edit Contact</a>
+        </div>
+        {{/each}}
+    </div>
+
+    <div class="contact-bottom">
+        <a href="/contacts/new" class="contact-bottom-child">Add Contact</a>
+        <a href="" class="contact-bottom-child">View All Messages</a>
+    </div>
+</div>

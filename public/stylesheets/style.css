@@ -1,1 +1,109 @@
-/* YOUR STYLES HERE */
+:root {
+  --primary-color: #ffb6c1;
+  --primary-color-hover: #FF69B4;
+  --secondary-color: #1d5f68;
+  --secondary-color-hover: #143f85;
+  --light-color: #f4f4f4;
+  --text-color: white;
+  --text-color-hover: gray;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box
+}
+body {
+  font-family: sans-serif;
+}
+ul#main-nav{
+    margin: 0;
+    padding: 0; 
+    list-style: none;
+}
+h3.logo, .nav-item{
+    color: white; 
+}
+a{
+    text-decoration: none
+}
+a:hover{
+    text-decoration: none
+}
+.logo{
+    margin: 0; 
+    font-size: 1.45rem; 
+}
+#main-nav{
+    margin-top: 5px;
+    display: flex
+}
+.logo a, #main-nav a{
+    padding: 10px 15px;
+    text-transform: uppercase;
+    text-align: center;
+    display: block
+}
+#main-nav a{
+    color: var(--text-color);
+    font-size: .99rem; 
+}
+#main-nav a:hover{
+    color: var(--text-color-hover);
+    text-decoration: none
+}
+.logo a{
+    color: var(--text-color)
+}
+.logo a:hover{
+    color: var(--text-color-hover); 
+    text-decoration: none; 
+}
+.header {
+	padding-top: .5em;
+	padding-bottom: .5em;
+	border: 1px solid #a2a2a2;
+	background-color: var(--primary-color); 
+	-webkit-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between
+}
+
+.btn-success{
+    background: var(--primary-color)
+}
+
+.contact{
+    display: flex; 
+    justify-content: space-around; 
+}
+a.contact-child{
+    padding: 5px 10px;
+    border: solid 1px; 
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: var(--text-color); 
+}
+a.contact-child:hover, a.contact-bottom-child:hover{
+    text-decoration: none;
+    background-color: var(--primary-color-hover);
+    color: var(--text-color)
+}
+a.contact-bottom-child{
+    padding: 7px 12px;
+    border: solid 1px;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: var(--text-color); 
+}
+.main-container{
+    margin: 20px 20px
+}
+.contacts-bottom{
+    margin: 20px 20px
+}
