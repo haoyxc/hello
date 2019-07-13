@@ -35,6 +35,27 @@ let contactSchema = new mongoose.Schema({
     }
 })
 
+let messageSchema = new mongoose.Schema({
+    create: {
+        type: Date
+    }, 
+    content: {
+        type: String
+    }, 
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User" 
+    }, 
+    contact: {
+        type:mongoose.Schema.ObjectId, 
+        ref: "Contact"
+    }, 
+    channel: {
+        type: String, 
+        default: "SMS"
+    }
+})
+
 
 userSchema.methods.getContacts = function(callback){
     let self = this; 

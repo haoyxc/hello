@@ -27,7 +27,7 @@ module.exports = function(passport) {
   });
   // Sign up
   router.get("/signup", (req, res) => {
-    res.render("signup", { logginIn: false });
+    res.render("signup", { loggedOut: true });
   });
 
   router.post(
@@ -41,12 +41,14 @@ module.exports = function(passport) {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.render("signup", {
-          error: "Fields must be at least 4 characters"
+          error: "Fields must be at least 4 characters", 
+          loggedOut: true
         });
       }
       if (!validateReq(req.body)) {
         return res.render("signup", {
-          error: "Passwords don't match."
+          error: "Passwords don't match.", 
+          loggedOut: true
         });
       }
 
@@ -65,7 +67,7 @@ module.exports = function(passport) {
   );
 
   router.get("/login", (req, res) => {
-    res.render("login", { loggedIn: false });
+    res.render("login", { loggedOut: true });
   });
 
   router.post(
@@ -78,7 +80,7 @@ module.exports = function(passport) {
 
   //whats the point of having get contacts in both auth and index??
   // router.get("/contacts", (req, res) => {
-  //   res.render("contacts", { loggedIn: true });
+  //   res.render("contacts", { loggedOut: true });
   // });
 
   //logout

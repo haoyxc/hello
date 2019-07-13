@@ -1,11 +1,11 @@
+<div class="container">
 {{#if error}}
 <div class="alert alert-danger" role="alert">
-    <i class="fas fa-exclamation-triangle"></i>
-    <span class="sr-only">Error: {{error}}</span>
+    <i class="fa fa-exclamation-triangle"> Error: {{error}}</i>
 </div>
 {{/if}}
 
-<form method="POST"
+{{!-- <form method="POST"
     style="max-width: 300px; margin: auto; margin-top: 50px; border: 0.5px solid gray; padding: 30px 30px 30px 30px">
     <h3>Login</h3>
     <div class="form-group">
@@ -19,4 +19,14 @@
     <div class="form-group">
         <button class="btn btn-info">Login</button>
     </div>
-</form>
+</form> --}}
+
+    <div class="form-container">
+        <form method="POST">
+            <h1>Log in</h1>
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <button class="form-btn">Login</button>
+        </form>
+    </div>
+</div>
