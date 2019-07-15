@@ -33,9 +33,9 @@ module.exports = function(passport) {
   router.post(
     "/signup",
     [
-      check("username").isLength({ min: 4 }),
+      check("username").isLength({ min: 3 }),
       // password must be at least 5 chars long
-      check("password").isLength({ min: 4 })
+      check("password").isLength({ min: 3 })
     ],
     (req, res) => {
       const errors = validationResult(req);
@@ -52,9 +52,15 @@ module.exports = function(passport) {
         });
       }
 
+      let numFixed = req.body.phone.replace(/[^0-9]+/g, "");
+      if (numFixed.length !== 10){
+        return res.render("signup", {error: "Please enter a 10 digit phone number"})
+      }
+      console.log(req.body.phone)
       var u = new models.User({
         username: req.body.username,
-        password: hashPassword(req.body.password)
+        password: hashPassword(req.body.password), 
+        phone: numFixed
       });
       u.save(function(err, user) {
         if (err) {

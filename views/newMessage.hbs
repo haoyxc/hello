@@ -1,13 +1,21 @@
 <div class="container">
-    <div class="form-container">
-        <form method="POST">
-            <h1>Send Message</h1>
-            {{!-- <input type="text" name="username" placeholder="Username"> --}}
-            <textarea name="content" id=""></textarea>
-            <button class="form-btn">Send Message to {{contact.name}} ({{contact.phone}})</button>
-        </form>
+
+    <div class="container">
+        {{#if error}}
+        <div class="alert alert-danger" role="alert">
+            <i class="fa fa-exclamation-triangle"> Error: {{error}}</i>
+        </div>
+        {{/if}}
+        
+        <div class="form-container">
+            <form method="POST">
+                <h1>Send Message</h1>
+                {{!-- <input type="text" name="username" placeholder="Username"> --}}
+                <textarea name="content" id=""></textarea>
+                <button class="form-btn">Send Message to {{contact.name}} ({{contact.phone}})</button>
+            </form>
+        </div>
+        <div class="links">
+            <a href="/contacts" class="nav-link">Back to contacts</a>
+        </div>
     </div>
-    <div class="links">
-        <a href="/contacts" class="nav-link">Back to contacts</a>
-    </div>
-</div>

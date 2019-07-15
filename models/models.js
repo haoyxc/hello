@@ -19,6 +19,8 @@ let userSchema = new mongoose.Schema({
     }, 
     phone: {
         type: String, 
+        minLength: 10,
+        maxLength: 10
     }
 })
 
@@ -27,7 +29,9 @@ let contactSchema = new mongoose.Schema({
         type: String
     }, 
     phone: {
-        type: String
+        type: String, 
+        minLength: 10,
+        maxLength: 10
     }, 
     owner: {
         type: mongoose.Schema.ObjectId, 
@@ -53,7 +57,20 @@ let messageSchema = new mongoose.Schema({
     channel: {
         type: String, 
         default: "SMS"
+    }, 
+    status: { //sent or received 
+        type: String
+    }, 
+    from: {
+        type: String, 
+        minLength: 10,
+        maxLength: 10
     }
+})
+
+let statusArticle = messageSchema.virtual("statusArticle").get(function(){
+    if (this.status === "sent") return "to"; 
+    else if (this.status === "received") return "from"
 })
 
 
