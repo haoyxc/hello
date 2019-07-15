@@ -157,36 +157,61 @@ router.post("/messages/send/:contactId", (req, res) => {
 router.post("/messages/receive", (req, res) => {
   // let contactNum = req.body.From.replace(/[^0-9]+/g, "").substring(1);
   let contactNum = req.body.From.substring(2);
-  let userNum = req.body.To.substring(2);
+  // let userNum = req.body.To.substring(2);
 
   let contact;
   let user;
 
-  Contact.findOne({ phone: contactNum }, (err, c) => {
+  Contact.findOne({ phone: contactNum }).populate("owner").exec((err, c) => {
     if (err) return res.redirect("/contacts");
-    contact = c;
-    User.findOne({ phone: userNum }, (err, u) => {
-      if (err) return res.redirect("/contacts");
-      user = u;
-      console.log(user, usernNum)
-      console.log(contact, contactNum)
-      let m = new Message({
-        created: new Date(),
-        content: req.body.Body,
-        status: "received",
-        user: user._id,
-        contact: contact._id,
-        from: contact.phone
-      });
-      m.save((err, message) => {
-        if (err) {
-          return res.redirect("/contacts");
-        } else {
-          res.redirect("/messages");
-        }
-      });
+    contact = c; 
+    user = contact.owner; 
+    let m = new Message({
+      created: new Date(),
+      content: req.body.Body,
+      status: "received",
+      user: user._id,
+      contact: contact._id,
+      from: contact.phone
     });
-  });
+    m.save((error, message) => {
+      if (error) {
+        console.log(error); 
+        return res.redirect("/contacts");
+      } else {
+        // res.redirect("/messages");
+        res.send("ok")
+
+      }
+    });
+
+  })
+
+  // Contact.findOne({ phone: contactNum }, (err, c) => {
+  //   if (err) return res.redirect("/contacts");
+  //   contact = c;
+  //   User.findOne({ phone: userNum }, (err, u) => {
+  //     if (err) return res.redirect("/contacts");
+  //     user = u;
+  //     console.log(user, userNum)
+  //     console.log(contact, contactNum)
+  //     let m = new Message({
+  //       created: new Date(),
+  //       content: req.body.Body,
+  //       status: "received",
+  //       user: user._id,
+  //       contact: contact._id,
+  //       from: contact.phone
+  //     });
+  //     m.save((err, message) => {
+  //       if (err) {
+  //         return res.redirect("/contacts");
+  //       } else {
+  //         res.redirect("/messages");
+  //       }
+  //     });
+  //   });
+  // });
 });
 
 module.exports = router;
