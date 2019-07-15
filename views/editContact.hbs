@@ -1,11 +1,14 @@
 <div class="container">
     <div class="form-container">
-        <form method="POST"
-            {{!-- style="max-width: 300px; margin: auto; margin-top: 50px; border: 0.5px solid gray; padding: 30px 30px 30px 30px" --}}>
+        <form method="POST">
             <h1>{{#if edit}} Edit {{else}}Create{{/if}} Contact</h1>
             <input type="text" name="name" placeholder="Contact Name" value={{contact.name}}>
             <input type="text" name="phone" placeholder="Contact Phone" value={{contact.phone}}>
             <button class="form-btn">{{#if edit}} Edit {{else}}Create{{/if}}</button>
         </form>
     </div>
+</div>
+
+<div class="links">
+    <a href="/contacts" class="nav-link">Back to contacts</a>
 </div>

@@ -66,10 +66,12 @@ module.exports = function(passport) {
     }
   );
 
+  //Get login page 
   router.get("/login", (req, res) => {
     res.render("login", { loggedOut: true });
   });
 
+  //
   router.post(
     "/login",
     passport.authenticate("local", {
@@ -77,11 +79,6 @@ module.exports = function(passport) {
       failureRedirect: "/login"
     })
   );
-
-  //whats the point of having get contacts in both auth and index??
-  // router.get("/contacts", (req, res) => {
-  //   res.render("contacts", { loggedOut: true });
-  // });
 
   //logout
   router.get("/logout", (req, res) => {

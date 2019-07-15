@@ -2,9 +2,8 @@
   /* --primary-color: #ffb6c1; */
   --primary-color: #ee8eaa; 
   --primary-color-hover: #ff69b4;
-  --secondary-color: #1d5f68;
+  --secondary-color: #b6fff4;
   --secondary-color-hover: #143f85;
-  --light-color: #f4f4f4;
   --text-color: white;
   --text-color-hover: gray;
 }
@@ -128,14 +127,14 @@ a.contact-bottom-child {
   align-items: center;
   text-align: center;
 }
-.form-container input {
+.form-container input, .form-container textarea {
   background: #ddd;
   border: none;
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
 }
-button.form-btn {
+button.form-btn, .nav-link {
   border-radius: 20px;
   border: 1px solid var(--primary-color);
   background: var(--primary-color);
@@ -147,10 +146,29 @@ button.form-btn {
   text-transform: uppercase;
   transition: transform 80ms ease-in;
 }
-button.form-btn:active {
+button.form-btn:active, .nav-link:active {
   transform: scale(0.95);
 }
 
-button.form-btn:focus {
+button.form-btn:focus, .nav-link:focus{
   outline: none;
+}
+.links{
+    padding: 80px
+}
+a.nav-link:hover{
+    text-decoration: none;
+    color: white;
+    background-color: var(--primary-color-hover)
+}
+
+/* messages */
+.messages.container{
+    display: flex;
+    align-items: flex-end; 
+}
+.message{
+    padding: 20px 20px;
+    margin-top: 20px;
+    background-color: var(--secondary-color)
 }

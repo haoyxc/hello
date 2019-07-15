@@ -8,8 +8,8 @@
         <div class="contact">
             <h5 class="name contact-child">{{this.name}}</h5>
             <h5 class="phoneNum contact-child">{{this.phone}}</h5>
-            <a href="" class="contact-child form-btn">Send Texts</a>
-            <a href="" class="contact-child form-btn"> View Messages</a>
+            <a href="/messages/send/{{this._id}}" class="contact-child form-btn">Send Texts</a>
+            <a href="/messages/{{this._id}}" class="contact-child form-btn"> View Messages</a>
             <a href="/contacts/edit/{{this._id}}" class="contact-child form-btn"> Edit Contact</a>
         </div>
         {{/each}}
@@ -17,6 +17,6 @@
 
     <div class="contact-bottom">
         <a href="/contacts/new" class="contact-bottom-child form-btn">Add Contact</a>
-        <a href="" class="contact-bottom-child form-btn">View All Messages</a>
+        <a href="/messages" class="contact-bottom-child form-btn">View All Messages</a>
     </div>
 </div>

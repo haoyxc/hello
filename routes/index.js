@@ -2,20 +2,24 @@ var express = require("express");
 var router = express.Router();
 var models = require("../models/models");
 var Contact = models.Contact;
+let Message = models.Message;
+let User = models.User;
 
-var accountSid = process.env.TWILIO_SID; 
-var authToken = process.env.TWILIO_AUTH_TOKEN; 
-var fromNumber = process.env.MY_TWILIO_NUMBER; 
-var twilio = require('twilio');
+var accountSid = process.env.TWILIO_SID;
+var authToken = process.env.TWILIO_AUTH_TOKEN;
+var fromNumber = process.env.MY_TWILIO_NUMBER;
+var twilio = require("twilio");
 var client = new twilio(accountSid, authToken);
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
-  // Your code here.
+  if (req.user) {
+    return res.redirect("/contacts");
+  }
+  res.redirect("/login");
 });
-
+//Get all contacts
 router.get("/contacts", (req, res) => {
-  console.log("in get contacts");
   req.user.getContacts((err, contacts) => {
     if (err) {
       res.render("/login", {
@@ -23,13 +27,14 @@ router.get("/contacts", (req, res) => {
         error: "Something went wrong, please try again"
       });
     }
-    console.log("contacts", contacts, "IN CONTAACTS");
     res.render("contacts", { contacts: contacts });
   });
 });
+//Get the new contact form
 router.get("/contacts/new", (req, res) => {
   res.render("editContact", { loggedOut: false });
 });
+//Save a new contact
 router.post("/contacts/new", (req, res) => {
   let name = req.body.name;
   let phone = req.body.phone;
@@ -46,10 +51,10 @@ router.post("/contacts/new", (req, res) => {
   });
 });
 
+//Get edit contact form
 router.get("/contacts/edit/:id", (req, res) => {
   Contact.findById(req.params.id)
     .then(contact => {
-      console.log("contact", contact);
       res.render("editContact", {
         loggedOut: false,
         contact: contact,
@@ -59,48 +64,87 @@ router.get("/contacts/edit/:id", (req, res) => {
     .catch(error => {});
 });
 
-router.post("/contacts/edit/:id", (req,res) => {
-  Contact.findOneAndUpdate(
-    {id: req.params.id}, {$set: {"name": req.body.name},
-    $set: {"phone": req.body.phone}}
-    )
-    .then(contact => {
-      res.redirect("/contacts")
-    })
-    .catch(() => {
-      res.redirect("/contacts/"+req.params.id)
-    })
-  })
-router.post("/contacts/edit/:id", (req, res) => {
-
-  Contact.update(
+//Edit contacts - POST
+router.post("/contacts/edit/:contactId", (req, res) => {
+  Contact.findByIdAndUpdate(
+    req.params.contactId,
     {
-      _id: req.params.id
-    }, {
-      $set: {"name": req.body.username}
-    })
-    .then(()=> {
-      res.redirect("/contacts")
-    })
-  // Contact.findOne({ _id: req.params.id })
-  // .then(c => {
-  //   c.name = req.body.name; 
-  //   c.phone = req.body.phone; 
-  //   res.redirect("/contacts", {});
-  //   console.log(c.name, req.body.name)
-  // })
-  // .catch(e=>{
-  //   res.redirect("/contacts/" + req.params.id); 
-  // })
-  // try {
-  //   Contact.findOneAndUpdate(
-  //     { _id: req.params.id },
-  //     { $set: { name: req.body.name, phone: req.body.phone } }
-  //   );
-  //   res.redirect("/contacts");
-  // } catch (e) {
-  //   res.redirect("/contacts/" + req.params.id);
-  // }
+      name: req.body.name,
+      phone: req.body.phone
+    },
+    function(err, user) {
+      if (err) {
+        console.log(err);
+        res.redirect("contacts");
+      } else {
+        res.redirect("/contacts");
+      }
+    }
+  );
+});
+
+//Get all messages!
+router.get("/messages", (req, res) => {
+  Message.find({ user: req.user._id })
+    .populate("contact")
+    .exec((err, messages) => {
+      if (err) return res.redirect("/contacts");
+      else {
+        res.render("/messages", { messages: messages });
+      }
+    });
+});
+
+//get messages
+router.get("/messages/:contactId", (req, res) => {
+  Message.find({ user: req.user._id, contact: req.params.contactId })
+    .populate("contact")
+    .exec((err, messages) => {
+      if (err) return res.redirect("/contacts");
+      else {
+        res.render("messages", { messages: messages });
+      }
+    });
+});
+router.get("/messages/send/:contactId", (req, res) => {
+  Contact.findById(req.params.contactId)
+    // .populate("owner")
+    .exec(function(err, contact) {
+      if (err) return res.redirect("/contacts");
+      else {
+        res.render("newMessage", { contact: contact });
+      }
+    });
+});
+
+router.post("/messages/send/:contactId", (req, res) => {
+  
+  Contact.findById(req.params.contactId).exec((err, contact) => {
+    let data = {
+      body: req.body.content,
+      to: "+1" + contact.phone, 
+      from: fromNumber
+    };
+
+    client.messages.create(data, function(err, msg) {
+      console.log(err, msg);
+      let m = new Message({
+        created: new Date(),
+        content: req.body.content,
+        user: req.user._id,
+        contact: req.params.contactId
+      });
+      m.save((err, message) => {
+        if (err) res.redirect("/messages/send/" + req.params.contactId);
+        else {
+          res.redirect("/messages/"+ req.params.contactId);
+        }
+      });
+    });
+
+  });
+
+
 });
 
 module.exports = router;

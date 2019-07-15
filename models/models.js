@@ -36,7 +36,7 @@ let contactSchema = new mongoose.Schema({
 })
 
 let messageSchema = new mongoose.Schema({
-    create: {
+    created: {
         type: Date
     }, 
     content: {
@@ -68,10 +68,12 @@ userSchema.methods.getContacts = function(callback){
 
 // Step 2: Create all of your models here, as properties.
 let User = mongoose.model("User", userSchema); 
-let Contact = mongoose.model("Contact", contactSchema)
+let Contact = mongoose.model("Contact", contactSchema); 
+let Message = mongoose.model("Message", messageSchema); 
 
 // Step 3: Export your models object
 module.exports = {
     User: User,
-    Contact: Contact
+    Contact: Contact, 
+    Message: Message
 }

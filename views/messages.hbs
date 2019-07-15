@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="messages-container">
+        {{#each messages}}
+        <div class="message">
+            <p>Sent to {{this.contact.name}} on {{this.created}} via {{this.channel}}</p>
+            <h4>{{this.content}}</h4>
+        </div>
+        {{/each}}
+    </div>
+    <div class="links">
+        <a href="/contacts" class="nav-link">Back to contacts</a>
+    </div>
+</div>
