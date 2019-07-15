@@ -58,7 +58,6 @@ function hashPassword(password) {
 
 // Tell passport how to read our user models
 passport.use(new LocalStrategy(function(username, password, done) {
-  console.log("hekl")
   // Find the user with the given username
   User.findOne({ username: username }, function (err, user) {
     // if there's an error, finish trying to authenticate (auth failed)

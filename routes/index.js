@@ -168,6 +168,8 @@ router.post("/messages/receive", (req, res) => {
     User.findOne({ phone: userNum }, (err, u) => {
       if (err) return res.redirect("/contacts");
       user = u;
+      console.log(user, usernNum)
+      console.log(contact, contactNum)
       let m = new Message({
         created: new Date(),
         content: req.body.Body,
