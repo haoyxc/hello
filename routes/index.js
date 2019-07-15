@@ -90,7 +90,7 @@ router.get("/messages", (req, res) => {
     .exec((err, messages) => {
       if (err) return res.redirect("/contacts");
       else {
-        res.render("/messages", { messages: messages });
+        res.render("messages", { messages: messages });
       }
     });
 });
