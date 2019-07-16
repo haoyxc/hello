@@ -90,7 +90,7 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: "http://localhost:3000/auth/facebook/callback",
+      callbackURL: "https://mighty-everglades-32013.herokuapp.com/auth/facebook/callback",
       profileFields: ["id", "displayName", "photos"]
     },
     function(accessToken, refreshToken, profile, cb) {
@@ -101,7 +101,7 @@ passport.use(
           phone: process.env.MY_TWILIO_NUMBER,
           pictureUrl: profile.photos[0].value,
           username: profile.displayName,
-          facebookId: profile.id, 
+          facebookId: profile.id,
           password: hashPassword(process.env.DEFAULT_PASS),
           accountType: "facebook"
         },
@@ -118,7 +118,7 @@ passport.use(
     {
       consumerKey: process.env.TWITTER_CONSUMER_KEY,
       consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-      callbackURL: "http://localhost:3000/auth/twitter/callback"
+      callbackURL: "https://mighty-everglades-32013.herokuapp.com/auth/twitter/callback"
     },
     function(token, tokenSecret, profile, cb) {
       User.findOrCreate(
@@ -129,7 +129,7 @@ passport.use(
           password: process.env.DEFAULT_PASS,
           accountType: "twitter",
           twitterId: profile.id,
-          phone: process.env.MY_TWILIO_NUMBER.substring(2), 
+          phone: process.env.MY_TWILIO_NUMBER.substring(2),
           twitterToken: token,
           twitterTokenSecret: tokenSecret
         },
