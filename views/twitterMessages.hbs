@@ -1,0 +1,15 @@
+<div class="links-top">
+    <a href="/contacts" class="nav-link">Back to contacts</a>
+</div>
+<div class="container">
+    <div class="messages-container twitter-messages">
+        {{#each messages}}
+        <div class="message">
+            {{!-- <p>Message {{this.status}} {{this.statusArticle}} {{this.contact.name}} on {{this.created}} via
+                {{this.channel}}</p> --}}
+            <h4>{{this.message_data.text}}</h4>
+        </div>
+        {{/each}}
+    </div>
+
+</div>

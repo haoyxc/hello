@@ -1,13 +1,24 @@
+<div class="links-top">
+    <a href="/contacts" class="nav-link">Back to contacts</a>
+</div>
 <div class="container">
     <div class="messages-container">
         {{#each messages}}
-        <div class="message">
-            <p>Message {{this.status}} {{this.statusArticle}} {{this.contact.name}} on {{this.created}} via {{this.channel}}</p>
+        <div class="message {{this.status}}">
+            <p>Message {{this.status}} {{this.statusArticle}} {{this.contact.name}} on {{this.created}} via
+                {{this.channel}}</p>
             <h4>{{this.content}}</h4>
         </div>
         {{/each}}
     </div>
-    <div class="links">
-        <a href="/contacts" class="nav-link">Back to contacts</a>
-    </div>
+
 </div>
+
+{{#if contact}}
+<div class="form-container" id="new-message-bottom">
+    <form method="POST" action="/messages/send/{{contact._id}}">
+        <textarea name="content" id=""></textarea>
+        <button class="form-btn">Send Message to {{contact.name}} ({{contact.phone}})</button>
+    </form>
+</div>
+{{/if}}

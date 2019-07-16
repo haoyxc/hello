@@ -1,16 +1,22 @@
 <div class="container">
-{{#if error}}
-<div class="alert alert-danger" role="alert">
-    <i class="fa fa-exclamation-triangle"> Error: {{error}}</i>
-</div>
-{{/if}}
+    {{#if error}}
+    <div class="alert alert-danger" role="alert">
+        <i class="fa fa-exclamation-triangle"> Error: {{error}}</i>
+    </div>
+    {{/if}}
 
     <div class="form-container">
         <form method="POST">
             <h1>Log in</h1>
+            <div class="social-container">
+                <a href="/auth/facebook" class="social-link"><i class="fa fa-facebook-f"></i></a>
+                <a href="/auth/twitter" class="social-link"><i class="fa fa-twitter"></i></a>
+            </div>
             <input type="text" name="username" placeholder="Username">
             <input type="password" name="password" placeholder="Password">
             <button class="form-btn">Login</button>
         </form>
     </div>
+
+
 </div>

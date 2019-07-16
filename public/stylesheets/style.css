@@ -1,9 +1,9 @@
 :root {
-  /* --primary-color: #ffb6c1; */
-  --primary-color: #ee8eaa; 
+  --primary-color: #ffb6c1;
+  /* --primary-color: #ee8eaa;  */
   --primary-color-hover: #ff69b4;
-  --secondary-color: #b6fff4;
-  --secondary-color-hover: #143f85;
+  --secondary-color: #b6c1ff;
+  --secondary-color2: #c1ffb6;
   --text-color: white;
   --text-color-hover: gray;
 }
@@ -14,7 +14,7 @@
   box-sizing: border-box;
 }
 body {
-  font-family: sans-serif;
+  font-family: 'Cuprum', sans-serif;
 }
 ul#main-nav {
   margin: 0;
@@ -77,16 +77,21 @@ a:hover {
 }
 
 /* Contact Display */
+.contacts{
+  margin-bottom: 50px; 
+}
 .contact {
   display: flex;
   justify-content: space-around;
+  margin-bottom: 10px;
 }
 a.contact-child {
-  padding: 10px 20px;
+  padding: 7px 15px;
   border: solid 1px;
   border-radius: 20px;
   background-color: var(--primary-color);
   color: var(--text-color);
+  text-align: center;
 }
 a.contact-child:hover,
 a.contact-bottom-child:hover {
@@ -95,23 +100,37 @@ a.contact-bottom-child:hover {
   color: var(--text-color);
 }
 a.contact-bottom-child {
-  padding: 20px 25px;
+  padding: 10px 15px;
   border: solid 1px;
   border-radius: 20px;
   background-color: var(--primary-color);
   color: var(--text-color);
 }
 .main-container {
-  margin: 20px 20px;
+  margin: 20px 50px;
 }
 .contact-bottom {
-  margin: 50px 20px;
+  margin: 20px 0px;
   display: flex;
-  justify-content: space-around
+  justify-content: flex-end;
 }
-.contact-bottom-child{
-    /* margin: 0 30px */
+.contact-bottom-child {
+  /* margin: 0 30px */
 }
+.contact h5 {
+  width: 10vw;
+}
+.account-info{
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px
+}
+.account-info img{
+  height: 50px; 
+  margin-right: 10px
+}
+
+  
 /* Form Display */
 .container {
   margin: 20px 30px;
@@ -127,14 +146,19 @@ a.contact-bottom-child {
   align-items: center;
   text-align: center;
 }
-.form-container input, .form-container textarea {
+.form-container input,
+.form-container textarea {
   background: #ddd;
   border: none;
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
 }
-button.form-btn, .nav-link {
+#new-message-bottom {
+  flex-direction: row;
+}
+button.form-btn,
+.nav-link {
   border-radius: 20px;
   border: 1px solid var(--primary-color);
   background: var(--primary-color);
@@ -146,29 +170,139 @@ button.form-btn, .nav-link {
   text-transform: uppercase;
   transition: transform 80ms ease-in;
 }
-button.form-btn:active, .nav-link:active {
+button.form-btn:active,
+.nav-link:active {
   transform: scale(0.95);
 }
 
-button.form-btn:focus, .nav-link:focus{
+button.form-btn:focus,
+.nav-link:focus {
   outline: none;
 }
-.links{
-    padding: 80px
+.links {
+  padding: 80px;
 }
-a.nav-link:hover{
+.links-top{
+  text-align: end
+}
+.links-top {
+  padding: 10px;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+a.nav-link:hover {
+  text-decoration: none;
+  color: white;
+  background-color: var(--primary-color-hover);
+}
+.social-container{
+    margin: 10px 0; 
+}
+.social-container a{
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    height: 40px;
+    width: 40px;
     text-decoration: none;
-    color: white;
-    background-color: var(--primary-color-hover)
+    font-size: 14px;
+}
+a:hover{
+  text-decoration: none; 
+}
+/* messages */
+.messages.container {
+  display: flex;
+}
+.message {
+  padding: 20px 20px;
+  margin-top: 20px;
+  /* background-color: var(--secondary-color) */
+}
+.message.sent {
+  background-color: var(--secondary-color);
+  margin: 10px 0 10px 100px;
+}
+.message.received {
+  background-color: var(--secondary-color2);
+  margin: 10px 100px 10px 0;
 }
 
-/* messages */
-.messages.container{
-    display: flex;
-    align-items: flex-end; 
+/*Extra Twitter stuff*/
+.twitter-tools{
+  margin-top: 40px
 }
-.message{
-    padding: 20px 20px;
-    margin-top: 20px;
-    background-color: var(--secondary-color)
+.twitter-tools h3{
+  margin-bottom: 40px
+}
+.twitter-messages .message{
+  background-color: var(--secondary-color2)
+}
+.twitter-tools .twitter-child{
+  margin: 30px
+}
+.twitter-btn{
+  border-radius: 20px;
+  border: 1px solid var(--secondary-color);
+  background: var(--secondary-color);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 20px
+}
+.twitter-btn:hover{
+  text-decoration: none; 
+}
+.twitter-child{
+  margin: 20px 0; 
+}
+.twitter-followers{
+  margin: 0 80px 30px 80px
+
+}
+.follower{
+  display: flex;
+  margin-top: 10px
+  
+}
+.follower-child{
+  flex: 1
+}
+.nav-link:hover{
+  color: white;
+  text-decoration: none
+}
+/* Failed modal stuff */
+.modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.1);
+}
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 1rem 1.5rem;
+  width: 24rem;
+  border-radius: 0.5rem;
+}
+
+.show-modal {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }

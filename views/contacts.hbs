@@ -1,22 +1,70 @@
 <div class="main-container">
+    <div class="contact-bottom">
+        <a href="/contacts/new" class="contact-bottom-child form-btn">Add Contact</a>
+        <a href="/messages" class="contact-bottom-child form-btn">View All Messages</a>
+    </div>
+    {{#if user.accountType}}
+    <div class="account-info">
+        <img src="{{user.pictureUrl}}" class="account-info-child" alt="">
+        <h3 class="account-info-child">Logged in as {{user.username}}</h3>
+    </div>
+    {{/if}}
 
-
-    <h1>Contacts</h1>
-
+    <h4>Contacts</h4>
     <div class="contacts">
         {{#each contacts}}
         <div class="contact">
             <h5 class="name contact-child">{{this.name}}</h5>
             <h5 class="phoneNum contact-child">{{this.phone}}</h5>
-            <a href="/messages/send/{{this._id}}" class="contact-child form-btn">Send Texts</a>
+            <a href="/messages/send/{{this._id}}" class="contact-child form-btn send-text">Send Texts</a>
             <a href="/messages/{{this._id}}" class="contact-child form-btn"> View Messages</a>
             <a href="/contacts/edit/{{this._id}}" class="contact-child form-btn"> Edit Contact</a>
         </div>
         {{/each}}
     </div>
 
-    <div class="contact-bottom">
-        <a href="/contacts/new" class="contact-bottom-child form-btn">Add Contact</a>
-        <a href="/messages" class="contact-bottom-child form-btn">View All Messages</a>
+    {{#if isTwitter}}
+    <div class="twitter-tools">
+        <h3>Twitter!</h3>
+        <a href="/twitter/messages" class="twitter-btn twitter-child">All Messages</a>
+        
+        <h5 class="twitter-child">All Followers</h5>
+        <div class="twitter-followers">
+            {{#each user.followers}}
+            <div class="follower">
+                <div class="follower-child">
+                    <img src="{{this.profile_image_url_https}}" alt="">
+                </div>
+
+                <h6 class="follower-child"><strong>{{this.name}}</strong> @{{this.screen_name}}</h6>
+                <div class="follower-child">
+                    <a href="/twitter/messages/send/{{this.id_str}}" class="follower-child twitter-btn">Send Message</a>
+                </div>
+
+            </div>
+            {{/each}}
+        </div>
+        <a href="/twitter/import" class="twitter-btn twitter-child">Import Twitter Followers</a>
+    </div>
+    {{/if}}
+</div>
+
+<div class="modal">
+    <div class="modal-content">
+        <form method="POST" action="/messages/send/{{contact._id}}">
+            <textarea name="content" id=""></textarea>
+            <button class="form-btn modal-btn">Send Message to {{contact.name}} ({{contact.phone}})</button>
+        </form>
     </div>
 </div>
+
+{{!-- <script>
+    let modal = $(".modal");
+    let trigger = $(".send-text");
+    let close = $(".form-btn.modal-btn")
+
+    $(".contacts").on("click", ".send-text", function (event) {
+        event.preventDefault();
+        $(".modal").toggleClass("show-modal");
+    })
+</script> --}}

@@ -1,15 +1,19 @@
-var express = require("express");
-var router = express.Router();
-var models = require("../models/models");
-var Contact = models.Contact;
+let express = require("express");
+let router = express.Router();
+let models = require("../models/models");
+let Contact = models.Contact;
 let Message = models.Message;
 let User = models.User;
 
-var accountSid = process.env.TWILIO_SID;
-var authToken = process.env.TWILIO_AUTH_TOKEN;
-var fromNumber = process.env.MY_TWILIO_NUMBER;
-var twilio = require("twilio");
-var client = new twilio(accountSid, authToken);
+let accountSid = process.env.TWILIO_SID;
+let authToken = process.env.TWILIO_AUTH_TOKEN;
+let fromNumber = process.env.MY_TWILIO_NUMBER;
+let twilio = require("twilio");
+let client = new twilio(accountSid, authToken);
+let mongoose = require("mongoose");
+mongoose.set("useFindAndModify", false);
+
+let Twitter = require("twitter");
 
 function validatePhone(phone) {
   if (phone.length > 10 || phone.length < 10) {
@@ -37,7 +41,11 @@ router.get("/contacts", (req, res) => {
         error: "Something went wrong, please try again"
       });
     }
-    res.render("contacts", { contacts: contacts });
+    let isTwitter = false;
+    if (req.user.accountType === "twitter") {
+      isTwitter = true;
+    }
+    res.render("contacts", { contacts: contacts, user: req.user, isTwitter: isTwitter });
   });
 });
 //Get the new contact form
@@ -112,7 +120,9 @@ router.get("/messages/:contactId", (req, res) => {
     .exec((err, messages) => {
       if (err) return res.redirect("/contacts");
       else {
-        res.render("messages", { messages: messages });
+        Contact.findById(req.params.contactId).exec((err2, contact) => {
+          res.render("messages", { messages: messages, contact: contact });
+        });
       }
     });
 });
@@ -155,63 +165,141 @@ router.post("/messages/send/:contactId", (req, res) => {
 });
 
 router.post("/messages/receive", (req, res) => {
-  // let contactNum = req.body.From.replace(/[^0-9]+/g, "").substring(1);
   let contactNum = req.body.From.substring(2);
-  // let userNum = req.body.To.substring(2);
 
   let contact;
   let user;
 
-  Contact.findOne({ phone: contactNum }).populate("owner").exec((err, c) => {
-    if (err) return res.redirect("/contacts");
-    contact = c; 
-    user = contact.owner; 
-    let m = new Message({
-      created: new Date(),
-      content: req.body.Body,
-      status: "received",
-      user: user._id,
-      contact: contact._id,
-      from: contact.phone
+  Contact.findOne({ phone: contactNum })
+    .populate("owner")
+    .exec((err, c) => {
+      if (err) return res.redirect("/contacts");
+      contact = c;
+      user = contact.owner;
+      let m = new Message({
+        created: new Date(),
+        content: req.body.Body,
+        status: "received",
+        user: user._id,
+        contact: contact._id,
+        from: contact.phone
+      });
+      m.save((error, message) => {
+        if (error) {
+          console.log(error);
+          return res.redirect("/contacts");
+        } else {
+          res.send("ok");
+        }
+      });
     });
-    m.save((error, message) => {
-      if (error) {
-        console.log(error); 
-        return res.redirect("/contacts");
-      } else {
-        // res.redirect("/messages");
-        res.send("ok")
+});
 
+router.get("/twitter/import", (req, res) => {
+  let client = new Twitter({
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+    access_token_key: req.user.twitterToken,
+    access_token_secret: req.user.twitterTokenSecret
+  });
+  client.get("followers/list.json?count=200", (err, response) => {
+    // console.log(client);
+    // console.log(response);
+    User.findOneAndUpdate(
+      { twitterId: req.user.twitterId },
+      {
+        $set: { followers: response.users }
+      },
+      (err, resp) => {
+        res.redirect("/contacts");
+      }
+    );
+  });
+});
+
+router.get("/twitter/messages", (req, res) => {
+  let client = new Twitter({
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+    access_token_key: req.user.twitterToken,
+    access_token_secret: req.user.twitterTokenSecret
+  });
+  client.get("direct_messages/events/list", (err, mess) => {
+    let messages = mess.events;
+    // console.log(typeof(mess.events))
+    let messages_created = [];
+    // messages.forEach(mes => console.log(mes));
+    messages.forEach(mes => messages_created.push(mes.message_create));
+    // console.log(messages_created);
+    res.render("twitterMessages", { messages: messages_created });
+  });
+});
+
+router.get("/twitter/messages/send/:id", (req, res) => {
+  User.findOne({ twitterId: req.user.twitterId }, (err, user) => {
+    user.followers.forEach(follower => {
+      if (follower.id_str === req.params.id) {
+        console.log(follower);
+        if (err) {
+          return res.redirect("/contacts");
+        }
+        res.render("newMessage", { contact: follower });
       }
     });
+  });
+});
 
-  })
+router.post("/twitter/messages/send/:id", (req, res) => {
+  let client = new Twitter({
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+    access_token_key: req.user.twitterToken,
+    access_token_secret: req.user.twitterTokenSecret
+  });
 
-  // Contact.findOne({ phone: contactNum }, (err, c) => {
-  //   if (err) return res.redirect("/contacts");
-  //   contact = c;
-  //   User.findOne({ phone: userNum }, (err, u) => {
-  //     if (err) return res.redirect("/contacts");
-  //     user = u;
-  //     console.log(user, userNum)
-  //     console.log(contact, contactNum)
-  //     let m = new Message({
-  //       created: new Date(),
-  //       content: req.body.Body,
-  //       status: "received",
-  //       user: user._id,
-  //       contact: contact._id,
-  //       from: contact.phone
-  //     });
-  //     m.save((err, message) => {
-  //       if (err) {
-  //         return res.redirect("/contacts");
-  //       } else {
-  //         res.redirect("/messages");
-  //       }
-  //     });
-  //   });
-  // });
+  console.log(client);
+  console.log(req.body.content, req.params.id);
+  client.post(
+    "direct_messages/events/new",
+    // {
+    //   event: {
+    //     type: "message_create",
+    //     message_create: {
+    //       target: { recipient_id: req.params.id },
+    //       message_data: { text: req.body.content }
+    //     }
+    //   }
+    // },
+    {
+      event: {
+        type: "message_create",
+        message_create: {
+          target: { recipient_id: req.params.id },
+          message_data: { text: req.body.content }
+        }
+      }
+    },
+    (err, resp) => {
+      console.log("ERROR", err);
+      console.log("RESP", resp);
+      res.redirect("/twitter/messages");
+    }
+  );
+
+  // client.post(
+  //   "direct_messages/events/new",
+  //   {
+  //     type: "message_create",
+  //     recipient_id: req.params.id,
+  //     text: req.body.content
+
+  //   },
+  //   (err, resp) => {
+  //     console.log("ERROR", err);
+  //     console.log("RESP", resp);
+  //     res.redirect("/twitter/messages");
+  //   }
+  // );
 });
 
 module.exports = router;

@@ -34,7 +34,6 @@ module.exports = function(passport) {
     "/signup",
     [
       check("username").isLength({ min: 3 }),
-      // password must be at least 5 chars long
       check("password").isLength({ min: 3 })
     ],
     (req, res) => {
