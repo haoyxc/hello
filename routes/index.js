@@ -14,6 +14,7 @@ let mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
 
 let Twitter = require("twitter");
+let Twit = require("twit");
 
 function validatePhone(phone) {
   if (phone.length > 10 || phone.length < 10) {
@@ -224,10 +225,15 @@ router.get("/twitter/messages", (req, res) => {
   });
   client.get("direct_messages/events/list", (err, mess) => {
     let messages = mess.events;
-    // console.log(typeof(mess.events))
     let messages_created = [];
-    // messages.forEach(mes => console.log(mes));
     messages.forEach(mes => messages_created.push(mes.message_create));
+    // console.log(typeof(mess.events))
+    try {
+      messages.forEach(mes => console.log(mes));
+    } catch (e) {
+      res.redirect("/");
+    }
+
     // console.log(messages_created);
     res.render("twitterMessages", { messages: messages_created });
   });
@@ -248,15 +254,15 @@ router.get("/twitter/messages/send/:id", (req, res) => {
 });
 
 router.post("/twitter/messages/send/:id", (req, res) => {
-  let client = new Twitter({
+  let client = new Twit({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-    access_token_key: req.user.twitterToken,
-    access_token_secret: req.user.twitterTokenSecret
+    access_token: req.user.twitterToken,
+    access_token_secret: req.user.twitterTokenSecret,
+    timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
+    strictSSL: true
   });
 
-  console.log(client);
-  console.log(req.body.content, req.params.id);
   client.post(
     "direct_messages/events/new",
     {
