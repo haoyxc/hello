@@ -5,7 +5,7 @@ let crypto = require("crypto");
 let { check, validationResult } = require("express-validator");
 
 module.exports = function(passport) {
-  // Add Passport-related auth routes here, to the router!
+  
   //helper function that validates user input
   let validateReq = function(userData) {
     return userData.password === userData.passwordRepeat;

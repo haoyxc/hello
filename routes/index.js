@@ -203,8 +203,6 @@ router.get("/twitter/import", (req, res) => {
     access_token_secret: req.user.twitterTokenSecret
   });
   client.get("followers/list.json?count=200", (err, response) => {
-    // console.log(client);
-    // console.log(response);
     User.findOneAndUpdate(
       { twitterId: req.user.twitterId },
       {
@@ -261,15 +259,6 @@ router.post("/twitter/messages/send/:id", (req, res) => {
   console.log(req.body.content, req.params.id);
   client.post(
     "direct_messages/events/new",
-    // {
-    //   event: {
-    //     type: "message_create",
-    //     message_create: {
-    //       target: { recipient_id: req.params.id },
-    //       message_data: { text: req.body.content }
-    //     }
-    //   }
-    // },
     {
       event: {
         type: "message_create",
@@ -285,21 +274,6 @@ router.post("/twitter/messages/send/:id", (req, res) => {
       res.redirect("/twitter/messages");
     }
   );
-
-  // client.post(
-  //   "direct_messages/events/new",
-  //   {
-  //     type: "message_create",
-  //     recipient_id: req.params.id,
-  //     text: req.body.content
-
-  //   },
-  //   (err, resp) => {
-  //     console.log("ERROR", err);
-  //     console.log("RESP", resp);
-  //     res.redirect("/twitter/messages");
-  //   }
-  // );
 });
 
 module.exports = router;

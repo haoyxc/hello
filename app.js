@@ -90,7 +90,7 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: "https://mighty-everglades-32013.herokuapp.com/auth/facebook/callback",
+      callbackURL: "/auth/facebook/callback",
       profileFields: ["id", "displayName", "photos"]
     },
     function(accessToken, refreshToken, profile, cb) {
@@ -118,7 +118,7 @@ passport.use(
     {
       consumerKey: process.env.TWITTER_CONSUMER_KEY,
       consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-      callbackURL: "https://mighty-everglades-32013.herokuapp.com/auth/twitter/callback"
+      callbackURL: "/auth/twitter/callback"
     },
     function(token, tokenSecret, profile, cb) {
       User.findOrCreate(
