@@ -126,7 +126,7 @@ passport.use(
         {
           pictureUrl: profile.photos[0].value,
           username: profile.displayName,
-          password: process.env.DEFAULT_PASS,
+          password: hashPassword(process.env.DEFAULT_PASS),
           accountType: "twitter",
           twitterId: profile.id,
           phone: process.env.MY_TWILIO_NUMBER.substring(2),
