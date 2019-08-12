@@ -10,7 +10,7 @@ let crypto = require("crypto");
 var MongoStore = require("connect-mongo")(session);
 let mongoose = require("mongoose");
 let FacebookStrategy = require("passport-facebook");
-let TwitterStrategy = require("passport-twitter"); 
+let TwitterStrategy = require("passport-twitter");
 
 let routes = require("./routes/index");
 let auth = require("./routes/auth");
@@ -143,7 +143,6 @@ passport.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Uncomment these out after you have implemented passport in step 1
 app.use("/", auth(passport));
 app.use("/", routes);
 
