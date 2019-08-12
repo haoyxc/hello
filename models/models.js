@@ -23,20 +23,20 @@ let userSchema = new mongoose.Schema({
   },
   pictureUrl: {
     type: String
-  }, 
+  },
   accountType: {
-      type: String,
-      default: null
-  }, 
+    type: String,
+    default: null
+  },
   followers: {
-      type: Object
-  }, 
+    type: Object
+  },
   facebookId: {
-      type: String
-  }, 
+    type: String
+  },
   twitterId: {
-      type: String
-  }, 
+    type: String
+  },
   twitterToken: String,
   twitterTokenSecret: String
 });
@@ -103,12 +103,10 @@ userSchema.methods.getContacts = function(callback) {
 
 userSchema.plugin(findOrCreate);
 
-// Step 2: Create all of your models here, as properties.
 let User = mongoose.model("User", userSchema);
 let Contact = mongoose.model("Contact", contactSchema);
 let Message = mongoose.model("Message", messageSchema);
 
-// Step 3: Export your models object
 module.exports = {
   User: User,
   Contact: Contact,
